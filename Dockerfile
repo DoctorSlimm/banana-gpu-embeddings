@@ -12,8 +12,10 @@ RUN pip3 install --upgrade pip
 # Install poetry
 RUN pip3 install poetry
 
-# Use poetry to generate requirements.txt from pyproject.toml
+# Generating requirements.txt
+#   from pyproject.toml and poetry.lock (need both)
 ADD pyproject.toml .
+ADD poetry.lock .
 RUN poetry export --without-hashes --format=requirements.txt > requirements.txt
 
 # Install python packages from requirements.txt
