@@ -30,7 +30,8 @@ ADD download.py .
 RUN python3 download.py
 
 
-# Add your custom app code, init() and inference()
+# Add your custom app code
+#   app.py contains the init() and inference(post_body:dict) methods
 ADD app.py .
 
 EXPOSE 8000
