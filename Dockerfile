@@ -4,7 +4,7 @@ FROM pytorch/pytorch:1.11.0-cuda11.3-cudnn8-runtime
 WORKDIR /
 
 # Install git
-RUN apt-get update && apt-get install -y git
+RUN apt-get update && apt-get install -y git && apt-get install curl
 
 # Install poetry
 RUN curl -sSL https://install.python-poetry.org | python3 -
