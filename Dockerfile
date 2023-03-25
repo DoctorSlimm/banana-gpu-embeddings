@@ -35,4 +35,6 @@ ADD app.py .
 
 EXPOSE 8000
 
+# Alternatively... we could just use poetry itself LOL
+# RUN poetry run python3 -u server.py
 CMD python3 -u server.py
