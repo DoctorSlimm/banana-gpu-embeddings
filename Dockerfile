@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y git
 
 # Install poetry
 RUN curl -sSL https://install.python-poetry.org | python3 -
+RUN poetry install
 
 # Generate requirements.txt
 RUN poetry export --without-hashes --format=requirements.txt > requirements.txt
