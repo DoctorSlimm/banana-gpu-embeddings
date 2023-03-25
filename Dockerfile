@@ -6,15 +6,17 @@ WORKDIR /
 # Install git
 RUN apt-get update && apt-get install -y git curl
 
-# Install poetry
-RUN curl -sSL https://install.python-poetry.org | python3 -
-RUN poetry install
+# Upgrade pip
+RUN pip3 install --upgrade pip
 
-# Generate requirements.txt
+# Install poetry (but not the actual packages)
+RUN pip3 install poetry
+
+# Use poetry to generate requirements.txt from pyproject.toml
 RUN poetry export --without-hashes --format=requirements.txt > requirements.txt
 
-# Install python packages (banana deps: sanic==22.6.2, accelerate)
-RUN pip3 install --upgrade pip
+# Install python packages from requirements.txt
+#   (banana deps: sanic==22.6.2, accelerate)
 RUN pip3 install -r requirements.txt
 
 # We add the banana boilerplate here
