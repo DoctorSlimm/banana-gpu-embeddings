@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y git curl
 # Upgrade pip
 RUN pip3 install --upgrade pip
 
-# Install poetry (but not the actual packages)
+# Install poetry
 RUN pip3 install poetry
 
 # Use poetry to generate requirements.txt from pyproject.toml
