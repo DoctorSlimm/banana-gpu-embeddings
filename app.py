@@ -38,7 +38,7 @@ def init():
         ##############################
         logging.info('Initializing Sentry')
         sentry_dsn = os.getenv('SENTRY_DSN')
-        sentry_sdk.init(dsn=sentry_dsn, traces_sample_rate=0.1)
+        sentry_sdk.init(dsn=sentry_dsn, traces_sample_rate=1.0)
 
         logging.info('Initialization complete in {} seconds'.format(time() - start_time))
 
