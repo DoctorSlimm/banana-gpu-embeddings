@@ -19,6 +19,18 @@ def init():
         load_dotenv()
 
         ##############################
+        # Initialize Sentry
+        ##############################
+        logging.info('Initializing Sentry')
+        sentry_dsn = os.getenv('SENTRY_DSN')
+        sentry_sdk.init(
+            dsn=sentry_dsn,
+            traces_sample_rate=1.0,
+            max_breadcrumbs=50,
+            debug=True,
+        )
+
+        ##############################
         # Load the model / pipeline
         ##############################
         logging.info('Loading model... and moving it to GPU')
@@ -32,13 +44,6 @@ def init():
 
         logging.info('Device: ', device)
         logging.info('Model Device: ', model.device)
-
-        ##############################
-        # Initialize Sentry
-        ##############################
-        logging.info('Initializing Sentry')
-        sentry_dsn = os.getenv('SENTRY_DSN')
-        sentry_sdk.init(dsn=sentry_dsn, traces_sample_rate=1.0)
 
         logging.info('Initialization complete in {} seconds'.format(time() - start_time))
 
