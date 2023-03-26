@@ -1,5 +1,6 @@
 import os
 import torch
+import logging
 import sentry_sdk
 
 import traceback
@@ -37,23 +38,33 @@ def inference(model_inputs: dict) -> dict:
     try:
         global model
 
-        # Parse out your arguments
+        ######################################
+        # Parse arguments
+        ######################################
         ping = model_inputs.get('ping', None)
         if ping is not None:
-            return {'message': 'pong'}
-
-        device_name = model_inputs.get('device_name', None)
-        if device_name is not None:
-            device = torch.device(device_name)
-            model.to(device)
+            logging.info('Ping received')
+            return {
+                'message': 'pong',
+                'total_time': time() - start_time,
+            }
 
         inputs = model_inputs.get('inputs', None)
         if inputs is None:
             return {
                 'message': "No inputs provided"
             }
+
+        device_name = model_inputs.get('device_name', None)
+        if device_name is not None:
+            logging.info(f"Changing device to {device_name}")
+            device = torch.device(device_name)
+            model.to(device)
+
+        model_inputs.pop('inputs', None)
         num_inputs = len(inputs)
-        print(f"Received {num_inputs} inputs")
+        logging.info(f"Received Arguments: {model_inputs}")
+        logging.info(f"Received {num_inputs} inputs")
 
         ######################################
         # Run the model

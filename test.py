@@ -46,11 +46,11 @@ if __name__ == '__main__':
     }
 
     # GPU API
-    t0 = time()
-    out = banana.run(api_key, model_key, model_inputs)
-    print('GPU API: ({:.2f}) / total'.format(time() - t0))
-    print('GPU API: ({}) / compute'.format(out['modelOutputs'][0]['time']))
-    print('Examples: {}\n'.format(len(sample_inputs)))
+    # t0 = time()
+    # out = banana.run(api_key, model_key, model_inputs)
+    # print('GPU API: ({:.2f}) / total'.format(time() - t0))
+    # print('GPU API: ({}) / compute'.format(out['modelOutputs'][0]['time']))
+    # print('Examples: {}\n'.format(len(sample_inputs)))
 
     # CPU (local)
     t0 = time()

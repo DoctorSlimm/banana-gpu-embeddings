@@ -3,6 +3,10 @@ FROM pytorch/pytorch:1.11.0-cuda11.3-cudnn8-runtime
 
 WORKDIR /
 
+# Adding ENV Variables from BANANA
+ARG SENTRY_DSN
+ENV SENTRY_DSN=${SENTRY_DSN}
+
 # Install git
 RUN apt-get update && apt-get install -y git curl
 
