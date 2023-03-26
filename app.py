@@ -2,6 +2,7 @@ import os
 import torch
 import logging
 import sentry_sdk
+# from sentry_sdk.integrations.logging import LoggingIntegration
 
 import traceback
 from dotenv import load_dotenv
@@ -27,13 +28,13 @@ def init():
             dsn=sentry_dsn,
             traces_sample_rate=1.0,
             max_breadcrumbs=50,
-            debug=True,
+            # debug=True,
         )
 
         ##############################
         # Load the model / pipeline
         ##############################
-        logging.info('Loading model... and moving it to GPU')
+        # logging.info('Loading model... and moving it to GPU')
         model = INSTRUCTOR('hkunlp/instructor-large')
 
         ##############################
@@ -42,10 +43,10 @@ def init():
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         model.to(device)
 
-        logging.info('Device: ', device)
-        logging.info('Model Device: ', model.device)
-
-        logging.info('Initialization complete in {} seconds'.format(time() - start_time))
+        # logging.info('Device: ', device)
+        # logging.info('Model Device: ', model.device)
+        #
+        # logging.info('Initialization complete in {} seconds'.format(time() - start_time))
 
     except Exception as e:
         logging.error(traceback.format_exc())
@@ -63,7 +64,7 @@ def inference(model_inputs: dict) -> dict:
         ######################################
         ping = model_inputs.get('ping', None)
         if ping is not None:
-            logging.info('Ping received')
+            # logging.info('Ping received')
             return {
                 'message': 'pong',
                 'total_time': time() - start_time,
@@ -81,10 +82,10 @@ def inference(model_inputs: dict) -> dict:
             device = torch.device(device_name)
             model.to(device)
 
-        model_inputs.pop('inputs', None)
-        num_inputs = len(inputs)
-        logging.info(f"Received Arguments: {model_inputs}")
-        logging.info(f"Received {num_inputs} inputs")
+        # model_inputs.pop('inputs', None)
+        # num_inputs = len(inputs)
+        # logging.info(f"Received Arguments: {model_inputs}")
+        # logging.info(f"Received {num_inputs} inputs")
 
         ######################################
         # Run the model
