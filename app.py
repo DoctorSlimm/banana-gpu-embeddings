@@ -13,24 +13,39 @@ from InstructorEmbedding import INSTRUCTOR
 
 
 def init():
-    load_dotenv()
     global model
+    try:
+        start_time = time()
+        load_dotenv()
 
-    ##############################
-    # Load the model / pipeline
-    ##############################
-    print('Loading model... and moving it to GPU')
-    model = INSTRUCTOR('hkunlp/instructor-large')
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model.to(device)
-    print('Device: ', device)
-    print('Model Device: ', model.device)
+        ##############################
+        # Load the model / pipeline
+        ##############################
+        logging.info('Loading model... and moving it to GPU')
+        model = INSTRUCTOR('hkunlp/instructor-large')
 
-    ##############################
-    # Initialize Sentry
-    ##############################
-    sentry_dsn = os.getenv('SENTRY_DSN')
-    sentry_sdk.init(dsn=sentry_dsn, traces_sample_rate=0.1)
+        ##############################
+        # Move model to GPU
+        ##############################
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        model.to(device)
+
+        logging.info('Device: ', device)
+        logging.info('Model Device: ', model.device)
+
+        ##############################
+        # Initialize Sentry
+        ##############################
+        logging.info('Initializing Sentry')
+        sentry_dsn = os.getenv('SENTRY_DSN')
+        sentry_sdk.init(dsn=sentry_dsn, traces_sample_rate=0.1)
+
+        logging.info('Initialization complete in {} seconds'.format(time() - start_time))
+
+    except Exception as e:
+        logging.error(traceback.format_exc())
+        logging.error(e)
+        raise e
 
 
 def inference(model_inputs: dict) -> dict:
