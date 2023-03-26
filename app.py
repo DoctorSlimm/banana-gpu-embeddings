@@ -2,7 +2,7 @@ import os
 import torch
 import logging
 import sentry_sdk
-# from sentry_sdk.integrations.logging import LoggingIntegration
+from sentry_sdk.integrations.logging import LoggingIntegration
 
 import traceback
 from dotenv import load_dotenv
@@ -22,20 +22,26 @@ def init():
         ##############################
         # Initialize Sentry
         ##############################
-        logging.info('Initializing Sentry')
         sentry_dsn = os.getenv('SENTRY_DSN')
+        sentry_logging = LoggingIntegration(
+            level=logging.INFO,        # Capture info and above as breadcrumbs
+            event_level=logging.INFO  # Send errors as events
+        )
         sentry_sdk.init(
             dsn=sentry_dsn,
-            traces_sample_rate=1.0,
             max_breadcrumbs=50,
-            # debug=True,
+            integrations=[
+                sentry_logging,
+            ],
+            traces_sample_rate=1.0,
         )
+        logging.info('Sentry initialized')
 
         ##############################
         # Load the model / pipeline
         ##############################
-        # logging.info('Loading model... and moving it to GPU')
         model = INSTRUCTOR('hkunlp/instructor-large')
+        logging.info('Model loaded')
 
         ##############################
         # Move model to GPU
@@ -43,10 +49,7 @@ def init():
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         model.to(device)
 
-        # logging.info('Device: ', device)
-        # logging.info('Model Device: ', model.device)
-        #
-        # logging.info('Initialization complete in {} seconds'.format(time() - start_time))
+        logging.info('Initialization complete in {} seconds'.format(time() - start_time))
 
     except Exception as e:
         logging.error(traceback.format_exc())
@@ -81,6 +84,8 @@ def inference(model_inputs: dict) -> dict:
             logging.info(f"Changing device to {device_name}")
             device = torch.device(device_name)
             model.to(device)
+        else:
+            device = model.device
 
         # model_inputs.pop('inputs', None)
         # num_inputs = len(inputs)
@@ -94,6 +99,7 @@ def inference(model_inputs: dict) -> dict:
         result = model.encode(
             inputs,
             show_progress_bar=True,
+            device=device,
         ).tolist()
 
         ######################################

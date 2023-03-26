@@ -45,16 +45,31 @@ if __name__ == '__main__':
         'inputs': sample_inputs
     }
 
+    # GPU API Ping
+    t0 = time()
+    out = banana.run(api_key, model_key, model_inputs={'ping': 'true'})
+    print('GPU API Ping: ({:.2f}s)'.format(time() - t0))
+
     # GPU API
-    # t0 = time()
-    # out = banana.run(api_key, model_key, model_inputs)
-    # print('GPU API: ({:.2f}) / total'.format(time() - t0))
-    # print('GPU API: ({}) / compute'.format(out['modelOutputs'][0]['time']))
-    # print('Examples: {}\n'.format(len(sample_inputs)))
+    t0 = time()
+    out = banana.run(api_key, model_key, model_inputs)
+    print('GPU API: ({:.2f}s) / network'.format(time() - t0))
+    print('GPU API: ({:.2f}s) / compute (pred)'.format(out['modelOutputs'][0]['time']))
+    print('GPU API: ({:.2f}s) / compute-time total'.format(out['modelOutputs'][0]['total_time']))
+    print('Examples: {}\n'.format(len(sample_inputs)))
+
+    # GPU API (Using CPU)
+    t0 = time()
+    model_inputs['device_name'] = 'cpu'
+    out = banana.run(api_key, model_key, model_inputs)
+    print('CPU API: ({:.2f}s) / network'.format(time() - t0))
+    print('CPU API: ({:.2f}s) / compute (pred)'.format(out['modelOutputs'][0]['time']))
+    print('CPU API: ({:.2f}s) / compute-time total'.format(out['modelOutputs'][0]['total_time']))
+    print('Examples: {}\n'.format(len(sample_inputs)))
 
     # CPU (local)
-    t0 = time()
-    res = requests.post('http://localhost:8000/', json=model_inputs)
-    print('CPU (local): ({:.2f})'.format(time() - t0))
-    print('Examples: {}\n'.format(len(sample_inputs)))
+    # t0 = time()
+    # res = requests.post('http://localhost:8000/', json=model_inputs)
+    # print('CPU (local): ({:.2f})'.format(time() - t0))
+    # print('Examples: {}\n'.format(len(sample_inputs)))
 
