@@ -87,8 +87,8 @@ def inference(model_inputs: dict) -> dict:
         }
 
     except Exception as e:
-        print(traceback.format_exc())
-        print(e)
+        logging.error(traceback.format_exc())
+        logging.error(e)
         return {
             'error': str(traceback.format_exc()) + str(e)
         }
