@@ -109,8 +109,8 @@ def inference(model_inputs: dict) -> dict:
         return {
             'message': 'Success',
             'result': result,
-            'time': time() - t0,
-            'total_time': time() - start_time,
+            'time': f'{time() - t0:.2f}',
+            'total_time': f'{time() - start_time:.2f}',
             'device': str(model.device),
         }
 
