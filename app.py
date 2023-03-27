@@ -70,7 +70,7 @@ def inference(model_inputs: dict) -> dict:
             # logging.info('Ping received')
             return {
                 'message': 'pong',
-                'total_time': time() - start_time,
+                'total_time': f'{time() - start_time:.2f}',
             }
 
         inputs = model_inputs.get('inputs', None)
@@ -84,6 +84,7 @@ def inference(model_inputs: dict) -> dict:
             logging.info(f"Changing device to {device_name}")
             device = torch.device(device_name)
             model.to(device)
+
         else:
             device = model.device
 

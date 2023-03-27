@@ -37,7 +37,7 @@ if __name__ == '__main__':
     model_key = os.getenv('BANANA_MODEL_ID')
     print('ModelKey: ', model_key)
 
-    for _ in range(6):
+    for _ in range(7):
         sample_inputs += sample_inputs
     print(len(sample_inputs))
 
@@ -48,7 +48,7 @@ if __name__ == '__main__':
     # GPU API Ping
     t0 = time()
     out = banana.run(api_key, model_key, model_inputs={'ping': 'true'})
-    print('GPU API Ping: ({:.2f}s)'.format(time() - t0))
+    print('GPU API Ping: ({:.2f}s)\n'.format(time() - t0))
 
     # GPU API
     t0 = time()
@@ -56,6 +56,7 @@ if __name__ == '__main__':
     print('GPU API: ({:.2f}s) / network'.format(time() - t0))
     print('GPU API: ({:.2f}s) / compute (pred)'.format(out['modelOutputs'][0]['time']))
     print('GPU API: ({:.2f}s) / compute-time total'.format(out['modelOutputs'][0]['total_time']))
+    print('Device: {}'.format(out['modelOutputs'][0]['device']))
     print('Examples: {}\n'.format(len(sample_inputs)))
 
     # GPU API (Using CPU)
@@ -65,6 +66,7 @@ if __name__ == '__main__':
     print('CPU API: ({:.2f}s) / network'.format(time() - t0))
     print('CPU API: ({:.2f}s) / compute (pred)'.format(out['modelOutputs'][0]['time']))
     print('CPU API: ({:.2f}s) / compute-time total'.format(out['modelOutputs'][0]['total_time']))
+    print('Device: {}'.format(out['modelOutputs'][0]['device']))
     print('Examples: {}\n'.format(len(sample_inputs)))
 
     # CPU (local)
